@@ -1,107 +1,80 @@
-class Main {  
-  public static void main(String args[]) { 
-    Main ins = new Main();
-   ins.run();
-  } 
+import java.util.ArrayList;
+import java.util.List;
+public class Matcher {  
+	public static void main(String args[]) throws Exception { 
+		Matcher ins = new Matcher();
+		ins.run();
+	} 
 
-  static List<Flight> flightList = new ArrayList<Flight>();	
+	static Itinerary itinerary = new Itinerary();
 	static {
-		flightList.add(new Flight("IAD", "SFO", 400, 3000));
-		flightList.add(new Flight("IAD", "JFK", 180.50, 1000));
-		flightList.add(new Flight("JFK", "SFO", 185, 1500));
-		flightList.add(new Flight("IAD", "ORD", 190, 2500));
-		flightList.add(new Flight("ORD", "LAX", 20, 2000));
-		flightList.add(new Flight("ORD", "SFO", 160, 2000));
-		flightList.add(new Flight("ORD", "LAX", 80, 500));
-		flightList.add(new Flight("LAX", "SFO", 50, 200));
-		flightList.add(new Flight("ORD", "DFW", 150, 200));
-		flightList.add(new Flight("JFK", "DFW", 50, 200));
-		flightList.add(new Flight("IAD", "LHR", 700, 3500));				
-	}
-	
-  
-  private void run(){
-     
-}
-
-
- public List<Leg> getMatchedItinerary(Itinerary itinerary) {
-        //create a final new list to capture legs
-        List<Leg> matchedItineraryList = new ArrayList<>(0);
-        List<Leg> incomingItineraryLegs = itinerary != null ? itinerary.getLegs() : new ArrayList<>(0);
-
-
-        Leg prevLeg = null;
-        boolean lastMatch = false;
-
-        for(Leg leg : incomingItineraryLegs){
-            String currentCarrier = leg.getCarrier();
-            if(prevLeg == null || !currentCarrier.equals(prevLeg.getCarrier())){
-                if(prevLeg != null){
-                    matchedItineraryList.add(prevLeg);
-                }
-                Leg newLeg = new Leg(leg.getOrigin(), leg.getDestination(), leg.getCarrier());
-                //matchedItineraryList.add(newLeg);
-                prevLeg = newLeg;
-            } else {
-                prevLeg = new Leg(prevLeg.getOrigin(), leg.getDestination(), leg.getCarrier());
-
-
-            }
-
-        }
-
-            matchedItineraryList.add(prevLeg);
-
-
-
-        return matchedItineraryList;
-    }
-
-static class Itinerary {
-
-	private final List<Leg> legs;
-	
-	public Itinerary() {
-		this.legs = new ArrayList<>();
+		itinerary.addLeg(new Leg("IAD", "LHR", "AA"));
+		itinerary.addLeg(new Leg("LHR", "DCA", "AA"));
+		itinerary.addLeg(new Leg("DCA", "FLL", "AF"));
+		itinerary.addLeg(new Leg("FLL", "MCT", "AA"));
+		itinerary.addLeg(new Leg("MCT", "ATL", "AA"));
 	}
 
-	public void addLeg(Leg leg){
-		legs.add(leg);
-	}
-	
-	public List<Leg> getLegs() {
-		return legs;
-	}
-
-}
-static class Leg {
-
-	@Override
-	public String toString() {
-		return "Leg [origin=" + origin + ", destination=" + destination + ", carrier=" + carrier + "]";
+	private void run() throws Exception{
+		List<Leg> matchedLegs = this.getMatchedItinerary(itinerary);
+	     if(matchedLegs.size() != 3) {
+	    	 throw new Exception("Matching Logic is incorrect");
+	     }
+	     
+	     
+		System.out.println(matchedLegs);
 	}
 
-	private final Location origin;
-	private final Location destination;
-	private final String carrier;
-	
-	public Leg(Location origin, Location destination, String carrier) {
-		this.origin = origin;
-		this.destination = destination;
-		this.carrier = carrier;
-	}
-	
-	public Location getOrigin() {
-		return origin;
+	//Implement the matching logic
+	public List<Leg> getMatchedItinerary(Itinerary itinerary) {
+		//create a final new list to capture leg
+		return matchedItineraryList;
 	}
 
-	public Location getDestination() {
-		return destination;
-	}
+	static class Itinerary {
 
-	public String getCarrier() {
-		return carrier;
+		private final List<Leg> legs;
+
+		public Itinerary() {
+			this.legs = new ArrayList<>();
+		}
+
+		public void addLeg(Leg leg){
+			legs.add(leg);
+		}
+
+		public List<Leg> getLegs() {
+			return legs;
+		}
+
 	}
-}
+	static class Leg {
+
+		@Override
+		public String toString() {
+			return "Leg [origin=" + origin + ", destination=" + destination + ", carrier=" + carrier + "]";
+		}
+
+		private final String origin;
+		private final String destination;
+		private final String carrier;
+
+		public Leg(String origin, String destination, String carrier) {
+			this.origin = origin;
+			this.destination = destination;
+			this.carrier = carrier;
+		}
+
+		public String getOrigin() {
+			return origin;
+		}
+
+		public String getDestination() {
+			return destination;
+		}
+
+		public String getCarrier() {
+			return carrier;
+		}
+	}
 }

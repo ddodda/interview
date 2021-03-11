@@ -6,7 +6,6 @@ Itinerary Matching Logic
  *   IAD - LHR - DCA - FLL - MCT - ATL
 	leg1: IAD - LHR, "AA"
 	leg2: LHR - DCA, "AA"
-
 	leg3: DCA - FLL, "AF"
 	leg4: FLL - MCT, "AA"
 	leg5: MCT - ATL, "AA"
